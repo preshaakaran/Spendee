@@ -1,101 +1,83 @@
+
+import { fetchAuthUserAction } from "@/actions";
+import LogOut from "@/components/log-out";
+
 import Image from "next/image";
+import Navbar from "@/components/navbar/page";
+import { Button } from "@/components/ui/button";
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
+import Link from "next/link";
 
-export default function Home() {
+
+
+export default async function Home() {
+  const currentUser = await fetchAuthUserAction();
+  const showToast = (message, type = "info") => {
+    Toastify({
+      text: message,
+      duration: 3000, // Duration in milliseconds
+      close: true, // Show close button
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      backgroundColor: type === "success" ? "green" : "red",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+    }).showToast();
+  };
+  
+
+
+  
+  
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="bg-black h-[100vh] p-5">
+      <Navbar currentUser={currentUser}/>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <main className="flex justify-between p-10 m-10">
+        <div className="text-white">
+        <h2 className="text-5xl font-bold">
+  Welcome, {currentUser?.success ? currentUser?.data?.userName : "User"}
+</h2>
+          
+          <p className="text-3xl mt-5 w-[50vw]">Spendee helps users manage their finances by tracking daily expenses.</p>
+          <div class="p-6 bg-zinc-900 rounded-lg shadow-md mt-5 text-xl">
+          <ul class="list-disc list-inside space-y-2 w-[45vw]">
+    
+    <li class="flex items-center">
+        <span class="mr-2 text-green-500">✔️</span>
+        <span class="font-medium">Categorization:</span> Organize expenses into categories for better insight.
+    </li>
+    <li class="flex items-center">
+        <span class="mr-2 text-green-500">✔️</span>
+        <span class="font-medium">Expense Display:</span> View and filter expenses by date or category.
+    </li>
+
+    <li class="flex items-center">
+        <span class="mr-2 text-green-500">✔️</span>
+        <span class="font-medium">Budget Insights:</span> Set monthly budgets and track spending.
+    </li>
+    <li class="flex items-center">
+        <span class="mr-2 text-green-500">✔️</span>
+        <span class="font-medium">Data Persistence:</span> Use local storage to retain expenses across sessions.
+    </li>
+    <li class="flex items-center">
+        <span class="mr-2 text-green-500">✔️</span>
+        <span class="font-medium">User-friendly Interface:</span> Simple and responsive design for easy navigation.
+    </li>
+    
+</ul>
+
+</div>
+      <Button className="mt-5 p-5 absolute left-[25vw] bg-violet-600 text-xl hover:bg-violet-700"><Link href={currentUser?.success ?'/upload':'/'} >Get Started</Link></Button>
+
         </div>
+
+        <img src="/file.png" alt="logo" className="h-[60vh] w-[60vh]" />
+
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+     
+
     </div>
   );
 }
